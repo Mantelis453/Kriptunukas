@@ -67,9 +67,9 @@ def get_ai_signal(
         # Build the prompt
         prompt = _build_prompt(symbol, indicators, current_position, portfolio_balance)
 
-        # Get model name from config (default to gemini-pro)
-        # Note: Use just 'gemini-pro' not 'models/gemini-pro'
-        model_name = config.get('model', 'gemini-pro')
+        # Get model name from config (default to gemini-1.5-flash)
+        # Note: Use just 'gemini-1.5-flash' not 'models/gemini-1.5-flash'
+        model_name = config.get('model', 'gemini-1.5-flash')
 
         # Call Gemini API
         logger.info(f"Calling Gemini API ({model_name}) for {symbol} analysis...")
@@ -92,6 +92,9 @@ def get_ai_signal(
 
         # Get response text
         response_text = response.text.strip()
+
+        # Log the raw response for debugging
+        logger.debug(f"Raw AI response: {response_text[:500]}")
 
         # Parse JSON response
         signal = _parse_ai_response(response_text)
@@ -264,6 +267,7 @@ def _parse_ai_response(response_text: str) -> Dict:
 
     except Exception as e:
         logger.error(f"Error parsing AI response: {e}")
+        logger.error(f"Full response: {response_text[:1000]}")
         raise
 
 
