@@ -76,14 +76,14 @@ def get_ai_signal(
 
         model = genai.GenerativeModel(model_name)
 
-        # Generate response
+        # Generate response with increased token limit for complete JSON
         response = model.generate_content(
             prompt,
             generation_config=genai.types.GenerationConfig(
                 temperature=0.3,  # Lower temperature for more consistent outputs
                 top_p=0.8,
                 top_k=40,
-                max_output_tokens=1024,
+                max_output_tokens=2048,  # Increased to ensure complete JSON responses
             )
         )
 
@@ -107,7 +107,18 @@ def get_ai_signal(
 
         # Log the raw response at INFO level to see what we're getting
         logger.info(f"✅ Gemini responded. Response length: {len(response_text)} chars")
-        logger.info(f"FULL RESPONSE:\n{response_text}")
+
+        # Write to file to avoid Docker log truncation
+        try:
+            with open('/app/data/last_ai_response.txt', 'w') as f:
+                f.write(f"Symbol: {symbol}\n")
+                f.write(f"Length: {len(response_text)} chars\n")
+                f.write(f"Response:\n{response_text}\n")
+            logger.info(f"Full response saved to /app/data/last_ai_response.txt")
+        except Exception as e:
+            logger.warning(f"Could not save response to file: {e}")
+
+        logger.info(f"Response first 200 chars: {response_text[:200]}")
 
         # Parse JSON response
         signal = _parse_ai_response(response_text)
