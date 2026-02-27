@@ -76,23 +76,8 @@ def get_ai_signal(
 
         model = genai.GenerativeModel(model_name)
 
-        # Generate response with increased token limit for complete JSON
-        response = model.generate_content(
-            prompt,
-            generation_config=genai.types.GenerationConfig(
-                temperature=0.1,  # Very low temperature for consistent JSON
-                top_p=0.95,  # Slightly higher for more completion freedom
-                top_k=1,  # Most deterministic
-                max_output_tokens=512,  # Reduced - our JSON should be ~300 chars max
-                candidate_count=1,
-            ),
-            safety_settings=[
-                {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-                {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-                {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-                {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
-            ]
-        )
+        # Generate response with minimal config for reliability
+        response = model.generate_content(prompt)
 
         # Calculate latency
         latency_ms = int((time.time() - start_time) * 1000)
@@ -240,9 +225,12 @@ TRADING RULES:
 7. If in a position, evaluate whether to HOLD, CLOSE, or ADJUST stop-loss
 8. Confidence must be 0-100. Only signal BUY or SELL if confidence >= 70
 
-CRITICAL: Respond with ONLY valid JSON. Keep "reasoning" field SHORT (max 100 chars). NO extra text.
-Format (raw JSON only, no markdown):
-{{"action": "BUY" | "SELL" | "HOLD" | "CLOSE", "confidence": 0-100, "reasoning": "short explanation", "entry_price": number_or_null, "stop_loss": number_or_null, "take_profit": number_or_null, "position_size_pct": 1-5_or_null, "adjust_stop_loss": number_or_null}}"""
+OUTPUT FORMAT:
+You must respond with ONLY a single line of valid JSON. Do NOT use markdown. Do NOT use code blocks. Do NOT add any text before or after the JSON. Keep reasoning under 80 characters.
+
+Example: {{"action": "BUY", "confidence": 75, "reasoning": "Oversold RSI bounce", "entry_price": 1900, "stop_loss": 1850, "take_profit": 2000, "position_size_pct": 2, "adjust_stop_loss": null}}
+
+Your response (single line JSON only):"""
 
     return prompt
 
