@@ -1,0 +1,46 @@
+# Crypto Trading Bot Configuration Example
+# Copy this file to config.yaml and fill in your actual values
+
+exchange:
+  name: binance  # Options: binance, bybit
+  testnet: true  # Set to false for real trading (NOT RECOMMENDED without testing)
+  api_key: "YOUR_BINANCE_TESTNET_API_KEY"
+  api_secret: "YOUR_BINANCE_TESTNET_SECRET"
+
+symbols:
+  - BTCUSDT
+  - ETHUSDT
+
+timeframes:
+  - 1h
+  - 4h
+
+ai:
+  method: gemini  # Options: gemini, claude_cli
+  model: gemini-1.5-flash  # Options: gemini-1.5-flash (recommended), gemini-1.5-pro, gemini-pro
+  gemini_api_key: "YOUR_GEMINI_API_KEY"  # Get free key at: https://makersuite.google.com/app/apikey
+  min_confidence: 70  # Minimum confidence to execute trades (0-100)
+  prompt_version: v1
+
+risk:
+  max_risk_per_trade: 0.02  # 2% of portfolio per trade
+  max_daily_drawdown: 0.05  # 5% maximum daily loss
+  max_open_positions: 3  # Maximum number of concurrent positions
+  cooldown_hours: 2  # Hours to wait before trading same symbol again
+  min_reward_risk_ratio: 2.0  # Minimum 2:1 reward to risk
+
+schedule:
+  analysis_interval_minutes: 60  # Run analysis every 60 minutes
+  monitor_interval_minutes: 5  # Check positions every 5 minutes
+
+telegram:
+  bot_token: "YOUR_TELEGRAM_BOT_TOKEN"  # Get from @BotFather
+  chat_id: "YOUR_TELEGRAM_CHAT_ID"  # Get from @userinfobot
+  enabled: true  # Set to false to disable Telegram notifications
+
+database:
+  path: "./bot.db"
+
+logging:
+  level: INFO  # Options: DEBUG, INFO, WARNING, ERROR
+  file: "./bot.log"

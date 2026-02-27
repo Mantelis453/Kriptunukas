@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  crypto-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crypto-trading-bot
+    restart: unless-stopped
+
+    # Mount config and data volumes
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro  # Read-only config
+      - ./bot.db:/app/bot.db                # Database (persisted)
+      - ./bot.log:/app/bot.log              # Logs (persisted)
+      - bot-data:/app/data                  # Additional data
+
+    # Environment variables (override with .env file)
+    environment:
+      - TZ=UTC  # Set your timezone (e.g., America/New_York, Europe/London)
+      - PYTHONUNBUFFERED=1
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Network mode
+    network_mode: bridge
+
+volumes:
+  bot-data:
+    driver: local
