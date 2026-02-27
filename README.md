@@ -1,105 +1,152 @@
-# 🤖 Crypto Trading Bot - AI Powered
+# 🤖 Kriptunukas - AI-Powered Crypto Trading Bot
 
-A sophisticated paper trading bot for Bybit testnet featuring AI-powered analysis using Claude CLI.
+<div align="center">
 
-## 📋 Features
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)](https://www.docker.com/)
+[![Gemini AI](https://img.shields.io/badge/AI-Gemini%201.5%20Flash-orange.svg)](https://ai.google.dev/)
 
-- **AI-Powered Analysis**: Uses Claude CLI for intelligent trading signals
-- **Technical Indicators**: RSI, MACD, Bollinger Bands, EMA, ATR, and more
-- **Risk Management**: Position sizing, stop-loss, take-profit, daily drawdown limits
-- **Paper Trading**: Safe testing on Bybit testnet
-- **Telegram Notifications**: Real-time alerts for trades and daily reports
-- **Database Tracking**: SQLite database for all trades, signals, and AI logs
-- **Scheduler**: Automated analysis and monitoring
+**AI-powered cryptocurrency trading bot with Gemini integration and Docker VPS deployment**
+
+[Features](#-features) • [Quick Start](#-quick-start) • [VPS Deploy](#-vps-deployment) • [Documentation](#-documentation)
+
+</div>
+
+---
+
+## 🎯 What is Kriptunukas?
+
+Kriptunukas is a production-ready cryptocurrency trading bot that uses **Google Gemini AI** to analyze market data and generate trading signals. It's designed for **paper trading** on Binance testnet, making it perfect for learning and testing strategies without risking real money.
+
+## ✨ Key Highlights
+
+- 🧠 **AI-Powered**: Google Gemini 1.5 Flash for lightning-fast analysis (1-2s)
+- 🆓 **Completely Free**: Free Gemini API + Binance testnet (no costs!)
+- 🐳 **Docker Ready**: One-command VPS deployment
+- 📊 **Technical Analysis**: RSI, MACD, Bollinger Bands, EMAs, volume analysis
+- 🛡️ **Risk Management**: Position sizing, stop-loss, take-profit, drawdown limits
+- 📱 **Telegram Alerts**: Real-time notifications for all trading signals
+- 💾 **Database Tracking**: Complete trade history in SQLite
+- 🔄 **Auto-Restart**: Survives crashes and VPS reboots
+
+## 💰 Cost Breakdown
+
+| Component | Cost | Notes |
+|-----------|------|-------|
+| **Gemini AI API** | $0 | Free tier (60 req/min) |
+| **Binance Testnet** | $0 | Paper trading only |
+| **Telegram Bot** | $0 | Free |
+| **VPS Hosting** | $5-6/mo | DigitalOcean, Vultr, Linode |
+| **Total** | **$5-6/month** | For 24/7 automated trading! |
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies
+### Option 1: Local Testing (5 minutes)
 
+1. **Get Gemini API key** (free): https://makersuite.google.com/app/apikey
+
+2. **Clone and configure:**
 ```bash
-cd crypto-bot
-pip3 install -r requirements.txt
+git clone https://github.com/Mantelis453/Kriptunukas.git
+cd Kriptunukas
+cp config.yaml.example config.yaml
+nano config.yaml  # Add your API keys
 ```
 
-### 2. Configure API Keys
-
-Edit `config.yaml` and add your credentials:
-
-```yaml
-exchange:
-  api_key: "YOUR_BYBIT_TESTNET_API_KEY"
-  api_secret: "YOUR_BYBIT_TESTNET_API_SECRET"
-```
-
-**Get Bybit Testnet API Keys:**
-1. Visit https://testnet.bybit.com
-2. Register for an account
-3. Go to API Management
-4. Create new API key
-
-### 3. (Optional) Configure Telegram
-
-To receive notifications:
-
-```yaml
-telegram:
-  bot_token: "YOUR_TELEGRAM_BOT_TOKEN"
-  chat_id: "YOUR_TELEGRAM_CHAT_ID"
-  enabled: true
-```
-
-**Get Telegram Bot Token:**
-1. Message @BotFather on Telegram
-2. Send /newbot and follow instructions
-3. Copy the bot token
-4. Message your bot to get your chat_id (use @userinfobot)
-
-### 4. Install Claude CLI
-
-The bot requires Claude CLI for AI analysis:
-
+3. **Install and run:**
 ```bash
-# Install Claude CLI (if not already installed)
-# Visit: https://docs.anthropic.com/en/docs/claude-code
+pip install -r requirements.txt
+python3 main.py --demo --once
 ```
 
-### 5. Run the Bot
+### Option 2: VPS Deployment (15 minutes)
 
-**Dry Run Mode** (recommended first):
+See [🐳 VPS Deployment](#-vps-deployment) below for complete guide.
+
+---
+
+## 🐳 VPS Deployment
+
+Deploy to a VPS for 24/7 automated trading:
+
+**1. Setup VPS:**
 ```bash
-python3 main.py --dry-run --once
+ssh root@YOUR_VPS_IP
+
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+apt install docker-compose -y
 ```
 
-This runs one analysis cycle without executing real trades.
-
-**Live Paper Trading:**
+**2. Upload code:**
 ```bash
-python3 main.py
+git clone https://github.com/Mantelis453/Kriptunukas.git
+cd Kriptunukas
 ```
 
-The bot will run continuously, analyzing markets at configured intervals.
+**3. Configure:**
+```bash
+cp config.yaml.example config.yaml
+nano config.yaml  # Add your API keys
+```
+
+**4. Deploy:**
+```bash
+./deploy.sh
+```
+
+**Done!** Bot runs 24/7 automatically! 🎉
+
+### Management Commands
+```bash
+docker-compose logs -f      # View logs
+docker-compose ps           # Check status
+docker-compose restart      # Restart bot
+./update.sh                 # Update bot
+./backup.sh                 # Backup database
+```
+
+---
+
+## 🔑 Required API Keys
+
+| Service | Purpose | Get It | Required |
+|---------|---------|--------|----------|
+| **Gemini AI** | Trading analysis | [Free Key](https://makersuite.google.com/app/apikey) | ✅ Yes |
+| **Binance Testnet** | Paper trading | [Testnet](https://testnet.binancefuture.com/) | ✅ Yes |
+| **Telegram Bot** | Notifications | [@BotFather](https://t.me/botfather) | ⚠️ Optional |
 
 ## 📊 Project Structure
 
 ```
-crypto-bot/
-├── config.yaml              # Configuration
-├── main.py                  # Entry point
-├── requirements.txt         # Dependencies
-├── data/
-│   ├── collector.py         # Fetch data from Bybit
-│   └── indicators.py        # Technical indicators
-├── ai/
-│   └── analyzer.py          # Claude CLI integration
-├── trading/
-│   ├── risk.py              # Risk management
-│   └── executor.py          # Order execution
-├── db/
-│   └── database.py          # SQLite operations
-├── notifications/
-│   └── telegram.py          # Telegram alerts
-└── utils/
-    └── logger.py            # Logging
+Kriptunukas/
+├── 🐳 Docker Files
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── .dockerignore
+│
+├── 🛠️ Scripts
+│   ├── deploy.sh          # One-command deployment
+│   ├── update.sh          # Easy updates
+│   └── backup.sh          # Database backups
+│
+├── 🤖 Application
+│   ├── main.py            # Entry point
+│   ├── config.yaml.example
+│   ├── requirements.txt
+│   ├── ai/                # Gemini AI integration
+│   ├── data/              # Market data & indicators
+│   ├── trading/           # Order execution & risk
+│   ├── db/                # Database operations
+│   ├── notifications/     # Telegram alerts
+│   └── utils/             # Logging utilities
+│
+└── 📚 Documentation (15+ guides)
+    ├── VPS_QUICKSTART.md
+    ├── VPS_DEPLOYMENT.md
+    ├── DEPLOYMENT_CHECKLIST.md
+    └── ...
 ```
 
 ## ⚙️ Configuration
@@ -115,13 +162,14 @@ Key settings in `config.yaml`:
 
 ## 🔍 How It Works
 
-1. **Data Collection**: Fetches OHLCV candles from Bybit
-2. **Indicator Calculation**: Computes RSI, MACD, Bollinger Bands, EMAs, etc.
-3. **AI Analysis**: Sends indicators to Claude CLI for trading signal
+1. **Data Collection**: Fetches OHLCV candles from Binance testnet
+2. **Indicator Calculation**: Computes RSI, MACD, Bollinger Bands, EMAs, ATR, volume
+3. **AI Analysis**: Sends indicators to Gemini AI for trading signal (1-2s response)
 4. **Risk Validation**: Checks position limits, drawdown, cooldown periods
-5. **Trade Execution**: Places orders with stop-loss and take-profit
-6. **Position Monitoring**: Tracks open positions and updates PnL
-7. **Daily Reporting**: Generates statistics and performance reports
+5. **Trade Execution**: Places orders with stop-loss and take-profit on testnet
+6. **Position Monitoring**: Tracks open positions and updates PnL every 5 minutes
+7. **Daily Reporting**: Generates statistics and performance reports at 23:55 UTC
+8. **Telegram Alerts**: Real-time notifications for all signals and errors
 
 ## 📝 Command Line Options
 
@@ -177,17 +225,32 @@ When enabled, you'll receive:
 
 ## 🐛 Troubleshooting
 
-**"API key is invalid"**
-- Ensure you're using Bybit TESTNET credentials
-- Check that API key has trading permissions
+**"Gemini API key not configured"**
+- Get free key at: https://makersuite.google.com/app/apikey
+- Update `gemini_api_key` in config.yaml
 
-**"Claude CLI not found"**
-- Install Claude CLI: https://docs.anthropic.com/en/docs/claude-code
-- Ensure `claude` command is in your PATH
+**"API key is invalid"**
+- Ensure you're using Binance TESTNET credentials
+- Check that API key has trading permissions
+- Visit: https://testnet.binancefuture.com/
 
 **"Failed to fetch candles"**
 - Check internet connection
-- Verify Bybit testnet is accessible
+- Verify Binance testnet is accessible
+
+**Bot not analyzing?**
+- Check logs: `docker-compose logs` or `tail bot.log`
+- Verify Gemini API key is set
+- Test connection: `python3 test_connection.py`
+
+**No Telegram notifications?**
+- Test: `python3 test_telegram.py`
+- Verify bot token and chat ID in config.yaml
+
+For detailed guides, see:
+- **VPS_QUICKSTART.md** - Quick deployment
+- **VPS_DEPLOYMENT.md** - Detailed setup
+- **GEMINI_SETUP.md** - API configuration
 
 ## ⚠️ Disclaimer
 
