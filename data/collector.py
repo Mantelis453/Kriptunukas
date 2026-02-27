@@ -39,12 +39,12 @@ class DataCollector:
             # Exchange-specific configurations
             if self.exchange_name == 'binance':
                 exchange_config['options']['defaultType'] = 'future'  # USDT-M Futures
-                # Binance testnet URL
+                # Binance testnet URL (updated to new demo endpoint)
                 if self.config.get('testnet', True):
                     exchange_config['urls'] = {
                         'api': {
-                            'public': 'https://testnet.binancefuture.com/fapi/v1',
-                            'private': 'https://testnet.binancefuture.com/fapi/v1',
+                            'public': 'https://demo-fapi.binance.com/fapi/v1',
+                            'private': 'https://demo-fapi.binance.com/fapi/v1',
                         }
                     }
 
