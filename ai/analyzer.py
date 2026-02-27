@@ -82,6 +82,13 @@ def get_ai_signal(
         # Calculate latency
         latency_ms = int((time.time() - start_time) * 1000)
 
+        # Log response details for debugging
+        logger.info(f"Response candidates count: {len(response.candidates) if hasattr(response, 'candidates') else 0}")
+        if hasattr(response, 'candidates') and response.candidates:
+            candidate = response.candidates[0]
+            logger.info(f"Finish reason: {candidate.finish_reason if hasattr(candidate, 'finish_reason') else 'N/A'}")
+            logger.info(f"Safety ratings: {candidate.safety_ratings if hasattr(candidate, 'safety_ratings') else 'N/A'}")
+
         # Check if response was blocked
         if not response.text:
             logger.error(f"Gemini blocked response. Prompt feedback: {response.prompt_feedback}")
@@ -94,8 +101,14 @@ def get_ai_signal(
                 latency_ms
             )
 
-        # Get response text
+        # Get response text and clean it
         response_text = response.text.strip()
+
+        # Remove markdown code blocks if present (Gemini sometimes ignores instructions)
+        response_text = response_text.replace('```json', '').replace('```', '').strip()
+
+        logger.info(f"Raw response length: {len(response.text)}")
+        logger.info(f"Cleaned response length: {len(response_text)}")
 
         # Log the raw response at INFO level to see what we're getting
         logger.info(f"✅ Gemini responded. Response length: {len(response_text)} chars")
