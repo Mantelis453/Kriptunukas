@@ -17,6 +17,12 @@ services:
     environment:
       - TZ=UTC  # Set your timezone (e.g., America/New_York, Europe/London)
       - PYTHONUNBUFFERED=1
+      # API Keys (optional - overrides config.yaml)
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - BINANCE_API_KEY=${BINANCE_API_KEY:-}
+      - BINANCE_API_SECRET=${BINANCE_API_SECRET:-}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
 
     # Resource limits
     deploy:
