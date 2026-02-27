@@ -107,7 +107,7 @@ def get_ai_signal(
 
         # Log the raw response at INFO level to see what we're getting
         logger.info(f"✅ Gemini responded. Response length: {len(response_text)} chars")
-        logger.info(f"Response preview: {response_text[:300]}")
+        logger.info(f"FULL RESPONSE:\n{response_text}")
 
         # Parse JSON response
         signal = _parse_ai_response(response_text)
@@ -275,13 +275,13 @@ def _parse_ai_response(response_text: str) -> Dict:
 
     except json.JSONDecodeError as e:
         logger.error(f"Failed to parse JSON response: {e}")
-        logger.error(f"Response text: {response_text[:500]}")
+        logger.error(f"Response text:\n{response_text}")
         raise ValueError(f"Invalid JSON response: {e}")
 
     except Exception as e:
         logger.error(f"Error parsing AI response: {e}")
         if 'response_text' in locals():
-            logger.error(f"Full response text:\n{response_text[:1000]}")
+            logger.error(f"Full response text:\n{response_text}")
         raise
 
 
