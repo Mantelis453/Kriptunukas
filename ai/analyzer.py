@@ -233,8 +233,9 @@ TRADING RULES:
 7. If in a position, evaluate whether to HOLD, CLOSE, or ADJUST stop-loss
 8. Confidence must be 0-100. Only signal BUY or SELL if confidence >= 70
 
-Respond with ONLY this JSON (no markdown, no code blocks, just raw JSON):
-{{"action": "BUY" | "SELL" | "HOLD" | "CLOSE", "confidence": 0-100, "reasoning": "2-3 sentence explanation", "entry_price": number_or_null, "stop_loss": number_or_null, "take_profit": number_or_null, "position_size_pct": 1-5_or_null, "adjust_stop_loss": number_or_null}}"""
+CRITICAL: Respond with ONLY valid JSON. Keep "reasoning" field SHORT (max 100 chars). NO extra text.
+Format (raw JSON only, no markdown):
+{{"action": "BUY" | "SELL" | "HOLD" | "CLOSE", "confidence": 0-100, "reasoning": "short explanation", "entry_price": number_or_null, "stop_loss": number_or_null, "take_profit": number_or_null, "position_size_pct": 1-5_or_null, "adjust_stop_loss": number_or_null}}"""
 
     return prompt
 
