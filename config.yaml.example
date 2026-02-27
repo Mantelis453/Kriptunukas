@@ -39,8 +39,8 @@ telegram:
   enabled: true  # Set to false to disable Telegram notifications
 
 database:
-  path: "./bot.db"
+  path: "/app/data/bot.db"
 
 logging:
   level: INFO  # Options: DEBUG, INFO, WARNING, ERROR
-  file: "./bot.log"
+  file: "/app/data/bot.log"

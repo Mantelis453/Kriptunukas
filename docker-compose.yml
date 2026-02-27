@@ -11,9 +11,7 @@ services:
     # Mount config and data volumes
     volumes:
       - ./config.yaml:/app/config.yaml:ro  # Read-only config
-      - ./bot.db:/app/bot.db                # Database (persisted)
-      - ./bot.log:/app/bot.log              # Logs (persisted)
-      - bot-data:/app/data                  # Additional data
+      - bot-data:/app/data                  # Database and logs (persisted)
 
     # Environment variables (override with .env file)
     environment:
