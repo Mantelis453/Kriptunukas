@@ -67,9 +67,9 @@ def get_ai_signal(
         # Build the prompt
         prompt = _build_prompt(symbol, indicators, current_position, portfolio_balance)
 
-        # Get model name from config (default to gemini-1.5-flash)
-        # Note: Use just 'gemini-1.5-flash' not 'models/gemini-1.5-flash'
-        model_name = config.get('model', 'gemini-1.5-flash')
+        # Get model name from config (default to gemini-2.5-flash)
+        # Note: Use just 'gemini-2.5-flash' not 'models/gemini-2.5-flash'
+        model_name = config.get('model', 'gemini-2.5-flash')
 
         # Call Gemini API
         logger.info(f"Calling Gemini API ({model_name}) for {symbol} analysis...")

@@ -17,7 +17,7 @@ timeframes:
 
 ai:
   method: gemini  # Options: gemini, claude_cli
-  model: gemini-1.5-flash  # Latest available flash model
+  model: gemini-2.5-flash  # Gemini 2.5 Flash - best price/performance (or use gemini-3-flash-preview for latest)
   gemini_api_key: "YOUR_GEMINI_API_KEY"  # Get free key at: https://aistudio.google.com/app/apikey
   min_confidence: 70  # Minimum confidence to execute trades (0-100)
   prompt_version: v1
