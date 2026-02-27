@@ -80,11 +80,18 @@ def get_ai_signal(
         response = model.generate_content(
             prompt,
             generation_config=genai.types.GenerationConfig(
-                temperature=0.3,  # Lower temperature for more consistent outputs
-                top_p=0.8,
-                top_k=40,
-                max_output_tokens=2048,  # Increased to ensure complete JSON responses
-            )
+                temperature=0.1,  # Very low temperature for consistent JSON
+                top_p=0.95,  # Slightly higher for more completion freedom
+                top_k=1,  # Most deterministic
+                max_output_tokens=512,  # Reduced - our JSON should be ~300 chars max
+                candidate_count=1,
+            ),
+            safety_settings=[
+                {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+            ]
         )
 
         # Calculate latency
