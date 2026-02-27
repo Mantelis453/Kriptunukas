@@ -8,14 +8,13 @@ from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
 
-# Try to import Gemini (new package)
+# Try to import Gemini
 try:
-    from google import genai
-    from google.genai import types
+    import google.generativeai as genai
     GEMINI_AVAILABLE = True
 except ImportError:
     GEMINI_AVAILABLE = False
-    logger.warning("google-genai not installed. Install with: pip install google-genai")
+    logger.warning("google-generativeai not installed. Install with: pip install google-generativeai")
 
 
 def get_ai_signal(
@@ -62,24 +61,25 @@ def get_ai_signal(
                 0
             )
 
-        # Initialize Gemini client
-        client = genai.Client(api_key=api_key)
+        # Configure Gemini
+        genai.configure(api_key=api_key)
 
         # Build the prompt
         prompt = _build_prompt(symbol, indicators, current_position, portfolio_balance)
 
-        # Get model name from config (use gemini-2.0-flash-exp by default - latest free model)
-        model_name = config.get('model', 'gemini-2.0-flash-exp')
+        # Get model name from config (default to gemini-1.5-flash)
+        model_name = config.get('model', 'gemini-1.5-flash')
 
         # Call Gemini API
         logger.info(f"Calling Gemini API ({model_name}) for {symbol} analysis...")
 
-        # Generate response using new API
-        response = client.models.generate_content(
-            model=model_name,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.3,
+        model = genai.GenerativeModel(model_name)
+
+        # Generate response
+        response = model.generate_content(
+            prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.3,  # Lower temperature for more consistent outputs
                 top_p=0.8,
                 top_k=40,
                 max_output_tokens=1024,
