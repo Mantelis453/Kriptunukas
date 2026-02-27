@@ -90,11 +90,24 @@ def get_ai_signal(
         # Calculate latency
         latency_ms = int((time.time() - start_time) * 1000)
 
+        # Check if response was blocked
+        if not response.text:
+            logger.error(f"Gemini blocked response. Prompt feedback: {response.prompt_feedback}")
+            logger.error(f"Candidates: {response.candidates if hasattr(response, 'candidates') else 'N/A'}")
+            return _default_hold_signal(
+                symbol,
+                "Response blocked by safety filters",
+                prompt,
+                f"Feedback: {response.prompt_feedback}",
+                latency_ms
+            )
+
         # Get response text
         response_text = response.text.strip()
 
-        # Log the raw response for debugging
-        logger.debug(f"Raw AI response: {response_text[:500]}")
+        # Log the raw response at INFO level to see what we're getting
+        logger.info(f"✅ Gemini responded. Response length: {len(response_text)} chars")
+        logger.info(f"Response preview: {response_text[:300]}")
 
         # Parse JSON response
         signal = _parse_ai_response(response_text)
@@ -267,7 +280,8 @@ def _parse_ai_response(response_text: str) -> Dict:
 
     except Exception as e:
         logger.error(f"Error parsing AI response: {e}")
-        logger.error(f"Full response: {response_text[:1000]}")
+        if 'response_text' in locals():
+            logger.error(f"Full response text:\n{response_text[:1000]}")
         raise
 
 
